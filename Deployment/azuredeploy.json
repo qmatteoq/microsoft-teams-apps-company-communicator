@@ -196,7 +196,7 @@
       "defaultValue": "master"
     },
     "serviceBusWebAppRoleNameGuid": {
-      "defaultValue": "958380b3-630d-4823-b933-f59d92cdcada",
+      "defaultValue": "4e1513f7-9520-4fac-89ab-7f40b1576c30",
       "minLength": 1,
       "type": "String",
       "metadata": {
@@ -204,7 +204,7 @@
       }
     },
     "serviceBusPrepFuncRoleNameGuid": {
-      "defaultValue": "ce6ca916-08e9-4639-bfbe-9d098baf42ca",
+      "defaultValue": "e0172755-7922-4a35-9ab6-7871e3fc1614",
       "minLength": 1,
       "type": "String",
       "metadata": {
@@ -212,7 +212,7 @@
       }
     },
     "serviceBusSendFuncRoleNameGuid": {
-      "defaultValue": "960365a2-c7bf-4ff3-8887-efa86fe4a163",
+      "defaultValue": "813395ce-2b32-44d1-b978-cbd17b86e511",
       "minLength": 1,
       "type": "String",
       "metadata": {
@@ -220,7 +220,7 @@
       }
     },
     "serviceBusDataFuncRoleNameGuid": {
-      "defaultValue": "d42703bc-421d-4d98-bc4d-cd2bb16e5b0a",
+      "defaultValue": "3ce63259-9f18-44be-831f-f30516be3364",
       "minLength": 1,
       "type": "String",
       "metadata": {
@@ -228,7 +228,7 @@
       }
     },
     "storageAccountWebAppRoleNameGuid": {
-      "defaultValue": "edd0cc48-2cf7-490e-99e8-131311e42030",
+      "defaultValue": "4d8fb70b-bf64-44a8-9225-79f4eba872df",
       "minLength": 1,
       "type": "String",
       "metadata": {
@@ -236,7 +236,7 @@
       }
     },
     "storageAccountPrepFuncRoleNameGuid": {
-      "defaultValue": "9332a9e9-93f4-48d9-8121-d279f30a732e",
+      "defaultValue": "30e42220-0da7-4615-b01b-da1d4d42f3b0",
       "minLength": 1,
       "type": "String",
       "metadata": {
@@ -244,7 +244,7 @@
       }
     },
     "storageAccountDataFuncRoleNameGuid": {
-      "defaultValue": "5b67af51-4a98-47e1-9d22-745069f51a13",
+      "defaultValue": "1b6781a3-8e0c-47cd-b4bb-f143312efec5",
       "minLength": 1,
       "type": "String",
       "metadata": {
