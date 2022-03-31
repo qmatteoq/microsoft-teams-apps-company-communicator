@@ -429,6 +429,10 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                                         return (
                                                             <Flex key={name} column>
                                                                 <Component {...props} />
+                                                                <Flex className="selectTeamsContainer" gap="gap.small" hidden={!this.state.teamsOptionSelected}>
+                                                                    <Button content="Select all" onClick={this.onSelectAllTeams} />
+                                                                    <Button content="Unselect all" onClick={this.onUnselectAllTeams} />
+                                                                </Flex>
                                                                 <Dropdown
                                                                     hidden={!this.state.teamsOptionSelected}
                                                                     placeholder={this.localize("SendToGeneralChannelPlaceHolder")}
@@ -452,6 +456,10 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                                         return (
                                                             <Flex key={name} column>
                                                                 <Component {...props} />
+                                                                    <Flex className="selectTeamsContainer" gap="gap.small" hidden={!this.state.rostersOptionSelected}>
+                                                                        <Button content="Select all" onClick={this.onSelectAllRosters} />
+                                                                        <Button content="Unselect all" onClick={this.onUnselectAllRosters}  />
+                                                                    </Flex>
                                                                 <Dropdown
                                                                     hidden={!this.state.rostersOptionSelected}
                                                                     placeholder={this.localize("SendToRostersPlaceHolder")}
@@ -607,6 +615,24 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             });
         }
         return resultedTeams;
+    }
+
+    private onSelectAllTeams = () => {
+        var teams = this.getItems();
+        this.setState({ selectedTeams: teams, selectedTeamsNum: teams.length });
+    }
+
+    private onUnselectAllTeams = () => {
+        this.setState({ selectedTeams: [], selectedTeamsNum: 0 });
+    }
+
+    private onSelectAllRosters = () => {
+        var teams = this.getItems();
+        this.setState({ selectedRosters: teams, selectedRostersNum: teams.length });
+    }
+
+    private onUnselectAllRosters = () => {
+        this.setState({ selectedRosters: [], selectedRostersNum: 0 });
     }
 
     private static MAX_SELECTED_TEAMS_NUM: number = 20;
