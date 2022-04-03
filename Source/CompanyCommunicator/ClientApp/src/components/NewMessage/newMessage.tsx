@@ -635,7 +635,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         this.setState({ selectedRosters: [], selectedRostersNum: 0 });
     }
 
-    private static MAX_SELECTED_TEAMS_NUM: number = 20;
+    private static MAX_SELECTED_TEAMS_NUM: number = 200;
 
     private onTeamsChange = (event: any, itemsData: any) => {
         if (itemsData.value.length > NewMessage.MAX_SELECTED_TEAMS_NUM) return;
