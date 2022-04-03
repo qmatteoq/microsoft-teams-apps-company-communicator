@@ -430,8 +430,8 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                                             <Flex key={name} column>
                                                                 <Component {...props} />
                                                                 <Flex className="selectTeamsContainer" gap="gap.small" hidden={!this.state.teamsOptionSelected}>
-                                                                    <Button content="Select all" onClick={this.onSelectAllTeams} />
-                                                                    <Button content="Unselect all" onClick={this.onUnselectAllTeams} />
+                                                                    <Button content={this.localize("SelectAll")} onClick={this.onSelectAllTeams} />
+                                                                    <Button content={this.localize("UnselectAll")} onClick={this.onUnselectAllTeams} />
                                                                 </Flex>
                                                                 <Dropdown
                                                                     hidden={!this.state.teamsOptionSelected}
@@ -457,8 +457,8 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                                             <Flex key={name} column>
                                                                 <Component {...props} />
                                                                     <Flex className="selectTeamsContainer" gap="gap.small" hidden={!this.state.rostersOptionSelected}>
-                                                                        <Button content="Select all" onClick={this.onSelectAllRosters} />
-                                                                        <Button content="Unselect all" onClick={this.onUnselectAllRosters}  />
+                                                                        <Button content={this.localize("SelectAll")} onClick={this.onSelectAllRosters} />
+                                                                        <Button content={this.localize("UnselectAll")} onClick={this.onUnselectAllRosters}  />
                                                                     </Flex>
                                                                 <Dropdown
                                                                     hidden={!this.state.rostersOptionSelected}
