@@ -67,6 +67,8 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
         [Fact]
         public void CreateInstance_AllParameters_ShouldBeSuccess()
         {
+            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
+
             // Arrange
             Action action = () => new DraftNotificationsController(this.notificationDataRepository.Object, this.teamDataRepository.Object, this.draftNotificationPreviewService.Object, this.appSettingsService.Object, this.localizer.Object, this.groupsService.Object, this.userAppOptions.Object);
 
@@ -130,7 +132,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             string warning = "NumberOfTeamsExceededLimitWarningFormat";
             var localizedString = new LocalizedString(warning, warning);
             this.localizer.Setup(_ => _[warning]).Returns(localizedString);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.CreateDraftNotificationAsync(notification);
@@ -152,7 +153,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             this.groupsService.Setup(x => x.ContainsHiddenMembershipAsync(It.IsAny<IEnumerable<string>>())).ReturnsAsync(false);
 
             this.notificationDataRepository.Setup(x => x.CreateOrUpdateAsync(It.IsAny<NotificationDataEntity>())).Returns(Task.CompletedTask);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.CreateDraftNotificationAsync(notification);
@@ -175,7 +175,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             string warning = "NumberOfRostersExceededLimitWarningFormat";
             var localizedString = new LocalizedString(warning, warning);
             this.localizer.Setup(_ => _[warning]).Returns(localizedString);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.CreateDraftNotificationAsync(notification);
@@ -196,7 +195,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             var notification = new DraftNotification() { Rosters = this.GetItemsList(20), Groups = new List<string>() };
             this.groupsService.Setup(x => x.ContainsHiddenMembershipAsync(It.IsAny<IEnumerable<string>>())).ReturnsAsync(false);
             this.notificationDataRepository.Setup(x => x.CreateOrUpdateAsync(It.IsAny<NotificationDataEntity>())).Returns(Task.CompletedTask);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.CreateDraftNotificationAsync(notification);
@@ -219,7 +217,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             string warning = "NumberOfGroupsExceededLimitWarningFormat";
             var localizedString = new LocalizedString(warning, warning);
             this.localizer.Setup(_ => _[warning]).Returns(localizedString);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.CreateDraftNotificationAsync(notification);
@@ -240,7 +237,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             var notification = new DraftNotification() { Groups = new List<string>() { "item1", "item2" } };
             this.groupsService.Setup(x => x.ContainsHiddenMembershipAsync(It.IsAny<IEnumerable<string>>())).ReturnsAsync(false);
             this.notificationDataRepository.Setup(x => x.CreateOrUpdateAsync(It.IsAny<NotificationDataEntity>())).Returns(Task.CompletedTask);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.CreateDraftNotificationAsync(notification);
@@ -260,7 +256,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             var controller = this.GetDraftNotificationsController();
             this.groupsService.Setup(x => x.ContainsHiddenMembershipAsync(It.IsAny<IEnumerable<string>>())).ReturnsAsync(true);
             var notification = new DraftNotification() { Groups = new List<string>() };
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.CreateDraftNotificationAsync(notification);
@@ -281,7 +276,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             this.groupsService.Setup(x => x.ContainsHiddenMembershipAsync(It.IsAny<IEnumerable<string>>())).ReturnsAsync(false);
             var notification = new DraftNotification() { Groups = new List<string>() };
             this.notificationDataRepository.Setup(x => x.CreateOrUpdateAsync(It.IsAny<NotificationDataEntity>())).Returns(Task.CompletedTask);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.CreateDraftNotificationAsync(notification);
@@ -302,7 +296,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             this.groupsService.Setup(x => x.ContainsHiddenMembershipAsync(It.IsAny<IEnumerable<string>>())).ReturnsAsync(false);
             var notification = new DraftNotification() { Groups = new List<string>() };
             this.notificationDataRepository.Setup(x => x.CreateOrUpdateAsync(It.IsAny<NotificationDataEntity>())).Returns(Task.CompletedTask);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.CreateDraftNotificationAsync(notification);
@@ -426,7 +419,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             string warning = "NumberOfTeamsExceededLimitWarningFormat";
             var localizedString = new LocalizedString(warning, warning);
             this.localizer.Setup(_ => _[warning]).Returns(localizedString);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.UpdateDraftNotificationAsync(notification);
@@ -447,7 +439,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             var notification = new DraftNotification() { Teams = this.GetItemsList(10), Groups = new List<string>() };
             this.groupsService.Setup(x => x.ContainsHiddenMembershipAsync(It.IsAny<IEnumerable<string>>())).ReturnsAsync(false);
             this.notificationDataRepository.Setup(x => x.CreateOrUpdateAsync(It.IsAny<NotificationDataEntity>())).Returns(Task.CompletedTask);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.UpdateDraftNotificationAsync(notification);
@@ -470,7 +461,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             string warning = "NumberOfRostersExceededLimitWarningFormat";
             var localizedString = new LocalizedString(warning, warning);
             this.localizer.Setup(_ => _[warning]).Returns(localizedString);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.UpdateDraftNotificationAsync(notification);
@@ -491,7 +481,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             var notification = new DraftNotification() { Rosters = this.GetItemsList(10), Groups = new List<string>() };
             this.groupsService.Setup(x => x.ContainsHiddenMembershipAsync(It.IsAny<IEnumerable<string>>())).ReturnsAsync(false);
             this.notificationDataRepository.Setup(x => x.CreateOrUpdateAsync(It.IsAny<NotificationDataEntity>())).Returns(Task.CompletedTask);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.UpdateDraftNotificationAsync(notification);
@@ -514,7 +503,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             string warning = "NumberOfGroupsExceededLimitWarningFormat";
             var localizedString = new LocalizedString(warning, warning);
             this.localizer.Setup(_ => _[warning]).Returns(localizedString);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.UpdateDraftNotificationAsync(notification);
@@ -535,7 +523,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
             var notification = new DraftNotification() { Groups = new List<string>() { "item1", "item2" } };
             this.groupsService.Setup(x => x.ContainsHiddenMembershipAsync(It.IsAny<IEnumerable<string>>())).ReturnsAsync(false);
             this.notificationDataRepository.Setup(x => x.CreateOrUpdateAsync(It.IsAny<NotificationDataEntity>())).Returns(Task.CompletedTask);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.UpdateDraftNotificationAsync(notification);
@@ -557,7 +544,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
 
             this.groupsService.Setup(x => x.ContainsHiddenMembershipAsync(It.IsAny<IEnumerable<string>>())).ReturnsAsync(false);
             this.notificationDataRepository.Setup(x => x.CreateOrUpdateAsync(It.IsAny<NotificationDataEntity>())).Returns(Task.CompletedTask);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.UpdateDraftNotificationAsync(notification);
@@ -579,7 +565,6 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
 
             this.groupsService.Setup(x => x.ContainsHiddenMembershipAsync(It.IsAny<IEnumerable<string>>())).ReturnsAsync(false);
             this.notificationDataRepository.Setup(x => x.CreateOrUpdateAsync(It.IsAny<NotificationDataEntity>())).Returns(Task.CompletedTask);
-            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
 
             // Act
             var result = await controller.UpdateDraftNotificationAsync(notification);
@@ -983,6 +968,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Test.Controllers
         {
             this.notificationDataRepository.Setup(x => x.TableRowKeyGenerator).Returns(new TableRowKeyGenerator());
             this.notificationDataRepository.Setup(x => x.TableRowKeyGenerator.CreateNewKeyOrderingOldestToMostRecent()).Returns(this.notificationId);
+            this.userAppOptions.Setup(x => x.Value).Returns(new UserAppOptions() { MaxNumberOfTeams = 20 });
             var controller = new DraftNotificationsController(this.notificationDataRepository.Object, this.teamDataRepository.Object, this.draftNotificationPreviewService.Object, this.appSettingsService.Object, this.localizer.Object, this.groupsService.Object, this.userAppOptions.Object);
             var user = new ClaimsPrincipal(new ClaimsIdentity());
             controller.ControllerContext = new ControllerContext();
