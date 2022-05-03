@@ -19,5 +19,10 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers.Options
         /// Gets or sets User app's external Id (id in the manifest).
         /// </summary>
         public string UserAppExternalId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the maximum number of teams you can select to receive a message
+        /// </summary>
+        public int MaxNumberOfTeams { get; set; }
     }
 }

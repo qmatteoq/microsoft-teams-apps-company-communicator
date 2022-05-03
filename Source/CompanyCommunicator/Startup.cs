@@ -121,6 +121,8 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator
 
                     options.UserAppExternalId =
                         configuration.GetValue<string>("UserAppExternalId", "148a66bb-e83d-425a-927d-09f4299a9274");
+
+                    options.MaxNumberOfTeams = configuration.GetValue<int>("MaxNumberOfTeams", 20);
                 });
 
             services.AddOptions();

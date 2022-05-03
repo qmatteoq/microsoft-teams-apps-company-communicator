@@ -13,12 +13,14 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
+    using Microsoft.Extensions.Options;
     using Microsoft.Teams.Apps.CompanyCommunicator.Authentication;
     using Microsoft.Teams.Apps.CompanyCommunicator.Common.Repositories.NotificationData;
     using Microsoft.Teams.Apps.CompanyCommunicator.Common.Repositories.TeamData;
     using Microsoft.Teams.Apps.CompanyCommunicator.Common.Resources;
     using Microsoft.Teams.Apps.CompanyCommunicator.Common.Services;
     using Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.MicrosoftGraph;
+    using Microsoft.Teams.Apps.CompanyCommunicator.Controllers.Options;
     using Microsoft.Teams.Apps.CompanyCommunicator.DraftNotificationPreview;
     using Microsoft.Teams.Apps.CompanyCommunicator.Models;
     using Microsoft.Teams.Apps.CompanyCommunicator.Repositories.Extensions;
@@ -36,6 +38,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers
         private readonly IGroupsService groupsService;
         private readonly IAppSettingsService appSettingsService;
         private readonly IStringLocalizer<Strings> localizer;
+        private readonly IOptions<UserAppOptions> userAppOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DraftNotificationsController"/> class.
@@ -46,13 +49,15 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers
         /// <param name="appSettingsService">App Settings service.</param>
         /// <param name="localizer">Localization service.</param>
         /// <param name="groupsService">group service.</param>
+        /// <param name="userAppOptions">the user app options</param>
         public DraftNotificationsController(
             INotificationDataRepository notificationDataRepository,
             ITeamDataRepository teamDataRepository,
             IDraftNotificationPreviewService draftNotificationPreviewService,
             IAppSettingsService appSettingsService,
             IStringLocalizer<Strings> localizer,
-            IGroupsService groupsService)
+            IGroupsService groupsService,
+            IOptions<UserAppOptions> userAppOptions)
         {
             this.notificationDataRepository = notificationDataRepository ?? throw new ArgumentNullException(nameof(notificationDataRepository));
             this.teamDataRepository = teamDataRepository ?? throw new ArgumentNullException(nameof(teamDataRepository));
@@ -60,6 +65,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers
             this.localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
             this.groupsService = groupsService ?? throw new ArgumentNullException(nameof(groupsService));
             this.appSettingsService = appSettingsService ?? throw new ArgumentNullException(nameof(appSettingsService));
+            this.userAppOptions = userAppOptions ?? throw new ArgumentNullException(nameof(userAppOptions));
         }
 
         /// <summary>
@@ -75,7 +81,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers
                 throw new ArgumentNullException(nameof(notification));
             }
 
-            if (!notification.Validate(this.localizer, out string errorMessage))
+            if (!notification.Validate(this.localizer, out string errorMessage, this.userAppOptions.Value.MaxNumberOfTeams))
             {
                 return this.BadRequest(errorMessage);
             }
@@ -137,7 +143,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers
                 return this.Forbid();
             }
 
-            if (!notification.Validate(this.localizer, out string errorMessage))
+            if (!notification.Validate(this.localizer, out string errorMessage, this.userAppOptions.Value.MaxNumberOfTeams))
             {
                 return this.BadRequest(errorMessage);
             }
