@@ -38,7 +38,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers
         private readonly IGroupsService groupsService;
         private readonly IAppSettingsService appSettingsService;
         private readonly IStringLocalizer<Strings> localizer;
-        private readonly IOptions<UserAppOptions> userAppOptions;
+        private readonly UserAppOptions userAppOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DraftNotificationsController"/> class.
@@ -65,7 +65,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers
             this.localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
             this.groupsService = groupsService ?? throw new ArgumentNullException(nameof(groupsService));
             this.appSettingsService = appSettingsService ?? throw new ArgumentNullException(nameof(appSettingsService));
-            this.userAppOptions = userAppOptions ?? throw new ArgumentNullException(nameof(userAppOptions));
+            this.userAppOptions = userAppOptions?.Value ?? throw new ArgumentNullException(nameof(userAppOptions));
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers
                 throw new ArgumentNullException(nameof(notification));
             }
 
-            if (!notification.Validate(this.localizer, out string errorMessage, this.userAppOptions.Value.MaxNumberOfTeams))
+            if (!notification.Validate(this.localizer, out string errorMessage, this.userAppOptions.MaxNumberOfTeams))
             {
                 return this.BadRequest(errorMessage);
             }
@@ -143,7 +143,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers
                 return this.Forbid();
             }
 
-            if (!notification.Validate(this.localizer, out string errorMessage, this.userAppOptions.Value.MaxNumberOfTeams))
+            if (!notification.Validate(this.localizer, out string errorMessage, this.userAppOptions.MaxNumberOfTeams))
             {
                 return this.BadRequest(errorMessage);
             }
