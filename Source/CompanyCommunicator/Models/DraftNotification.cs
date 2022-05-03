@@ -51,7 +51,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Models
         /// </summary>
         /// <param name="localizer">The string localizer service.</param>
         /// <param name="errorMessage">It returns the error message found by the method to the callers.</param>
-        /// <param name="maxSelectedTeamNum">The maximum number of teams that can receive a message</param>
+        /// <param name="maxSelectedTeamNum">The maximum number of teams that can receive a message.</param>
         /// <returns>A flag indicates if a draft notification is valid or not.</returns>
         public bool Validate(IStringLocalizer<Strings> localizer, out string errorMessage, int maxSelectedTeamNum)
         {

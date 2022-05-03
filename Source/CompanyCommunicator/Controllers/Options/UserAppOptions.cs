@@ -21,7 +21,7 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Controllers.Options
         public string UserAppExternalId { get; set; }
 
         /// <summary>
-        /// Gets or sets the maximum number of teams you can select to receive a message
+        /// Gets or sets the maximum number of teams you can select to receive a message.
         /// </summary>
         public int MaxNumberOfTeams { get; set; }
     }
