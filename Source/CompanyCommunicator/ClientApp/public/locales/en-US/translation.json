@@ -85,6 +85,7 @@
   "ExportButtonProgressText": "Export in progress",
   "ErrorURLMessage": "URL must start with https://",
   "SelectAll": "Select all",
-  "UnselectAll": "Unselect all"
+  "UnselectAll": "Unselect all",
+  "MaxTeamsError": "You are trying to send the message to too many teams. Please select fewer teams and try again."
   
 }

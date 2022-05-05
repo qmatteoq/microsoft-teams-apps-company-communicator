@@ -20,6 +20,9 @@ import { getBaseUrl } from '../../configVariables';
 import { ImageUtil } from '../../utility/imageutility';
 import { TFunction } from "i18next";
 
+import axios from '../../apis/axiosJWTDecorator';
+let baseAxiosUrl = getBaseUrl() + '/api';
+
 type dropdownItem = {
     key: string,
     header: string,
@@ -75,6 +78,8 @@ export interface formState {
     selectedGroups: dropdownItem[],
     errorImageUrlMessage: string,
     errorButtonUrlMessage: string,
+    maxNumberOfTeams: number,
+    isMaxNumberOfTeamsError: boolean
 }
 
 export interface INewMessageProps extends RouteComponentProps, WithTranslation {
@@ -120,6 +125,8 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             selectedGroups: [],
             errorImageUrlMessage: "",
             errorButtonUrlMessage: "",
+            maxNumberOfTeams: 20,
+            isMaxNumberOfTeamsError: false
         }
     }
 
@@ -128,6 +135,18 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         //- Handle the Esc key
         document.addEventListener("keydown", this.escFunction, false);
         let params = this.props.match.params;
+
+        //get the maximum number of teams that can receive a message
+        let url = baseAxiosUrl + "/options";
+        
+        try {
+            var response = await axios.get(url);
+            this.setState({maxNumberOfTeams: response.data});
+        }
+        catch {
+            this.setState({maxNumberOfTeams: response.data})
+        }
+
         this.setGroupAccess();
         this.getTeamList().then(() => {
             if ('id' in params) {
@@ -333,6 +352,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                             <Flex className="scrollableContent">
                                 <Flex.Item size="size.half">
                                     <Flex column className="formContentContainer">
+
                                         <Input className="inputField"
                                             value={this.state.title}
                                             label={this.localize("TitleText")}
@@ -414,6 +434,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                 <Flex.Item size="size.half">
                                     <Flex column className="formContentContainer">
                                         <h3>{this.localize("SendHeadingText")}</h3>
+                                        <Text content={this.localize("MaxTeamsError")} hidden={!this.state.isMaxNumberOfTeamsError} error />
                                         <RadioGroup
                                             className="radioBtns"
                                             checkedValue={this.state.selectedRadioBtn}
@@ -432,7 +453,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                                                 <Flex className="selectTeamsContainer" gap="gap.small" hidden={!this.state.teamsOptionSelected}>
                                                                     <Button content={this.localize("SelectAll")} onClick={this.onSelectAllTeams} />
                                                                     <Button content={this.localize("UnselectAll")} onClick={this.onUnselectAllTeams} />
-                                                                </Flex>
+                                                                </Flex>                                                                
                                                                 <Dropdown
                                                                     hidden={!this.state.teamsOptionSelected}
                                                                     placeholder={this.localize("SendToGeneralChannelPlaceHolder")}
@@ -456,10 +477,10 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
                                                         return (
                                                             <Flex key={name} column>
                                                                 <Component {...props} />
-                                                                    <Flex className="selectTeamsContainer" gap="gap.small" hidden={!this.state.rostersOptionSelected}>
-                                                                        <Button content={this.localize("SelectAll")} onClick={this.onSelectAllRosters} />
-                                                                        <Button content={this.localize("UnselectAll")} onClick={this.onUnselectAllRosters}  />
-                                                                    </Flex>
+                                                                <Flex className="selectTeamsContainer" gap="gap.small" hidden={!this.state.rostersOptionSelected}>
+                                                                    <Button content={this.localize("SelectAll")} onClick={this.onSelectAllRosters} />
+                                                                    <Button content={this.localize("UnselectAll")} onClick={this.onUnselectAllRosters}  />
+                                                                </Flex>
                                                                 <Dropdown
                                                                     hidden={!this.state.rostersOptionSelected}
                                                                     placeholder={this.localize("SendToRostersPlaceHolder")}
@@ -635,10 +656,14 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         this.setState({ selectedRosters: [], selectedRostersNum: 0 });
     }
 
-    private static MAX_SELECTED_TEAMS_NUM: number = 200;
-
     private onTeamsChange = (event: any, itemsData: any) => {
-        if (itemsData.value.length > NewMessage.MAX_SELECTED_TEAMS_NUM) return;
+        if (itemsData.value.length > this.state.maxNumberOfTeams) {
+            this.setState({isMaxNumberOfTeamsError: true});
+        }
+        else {
+            this.setState({isMaxNumberOfTeamsError:false});
+        }
+        
         this.setState({
             selectedTeams: itemsData.value,
             selectedTeamsNum: itemsData.value.length,
@@ -646,11 +671,17 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             selectedRostersNum: 0,
             selectedGroups: [],
             selectedGroupsNum: 0
-        })
+        });
     }
 
     private onRostersChange = (event: any, itemsData: any) => {
-        if (itemsData.value.length > NewMessage.MAX_SELECTED_TEAMS_NUM) return;
+        if (itemsData.value.length > this.state.maxNumberOfTeams) {
+            this.setState({isMaxNumberOfTeamsError: true});
+        }
+        else {
+            this.setState({isMaxNumberOfTeamsError:false});
+        }
+
         this.setState({
             selectedRosters: itemsData.value,
             selectedRostersNum: itemsData.value.length,
@@ -658,7 +689,7 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
             selectedTeamsNum: 0,
             selectedGroups: [],
             selectedGroupsNum: 0
-        })
+        });
     }
 
     private onGroupsChange = (event: any, itemsData: any) => {
@@ -728,32 +759,37 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
         const selectedTeams: string[] = [];
         const selctedRosters: string[] = [];
         const selectedGroups: string[] = [];
-        this.state.selectedTeams.forEach(x => selectedTeams.push(x.team.id));
-        this.state.selectedRosters.forEach(x => selctedRosters.push(x.team.id));
-        this.state.selectedGroups.forEach(x => selectedGroups.push(x.team.id));
 
-        const draftMessage: IDraftMessage = {
-            id: this.state.messageId,
-            title: this.state.title,
-            imageLink: this.state.imageLink,
-            summary: this.state.summary,
-            author: this.state.author,
-            buttonTitle: this.state.btnTitle,
-            buttonLink: this.state.btnLink,
-            teams: selectedTeams,
-            rosters: selctedRosters,
-            groups: selectedGroups,
-            allUsers: this.state.allUsersOptionSelected
-        };
-
-        if (this.state.exists) {
-            this.editDraftMessage(draftMessage).then(() => {
-                microsoftTeams.tasks.submitTask();
-            });
+        if (this.state.selectedTeamsNum > this.state.maxNumberOfTeams || this.state.selectedRostersNum > this.state.maxNumberOfTeams) {
+            this.setState( { isMaxNumberOfTeamsError: true});
         } else {
-            this.postDraftMessage(draftMessage).then(() => {
-                microsoftTeams.tasks.submitTask();
-            });
+            this.state.selectedTeams.forEach(x => selectedTeams.push(x.team.id));
+            this.state.selectedRosters.forEach(x => selctedRosters.push(x.team.id));
+            this.state.selectedGroups.forEach(x => selectedGroups.push(x.team.id));
+    
+            const draftMessage: IDraftMessage = {
+                id: this.state.messageId,
+                title: this.state.title,
+                imageLink: this.state.imageLink,
+                summary: this.state.summary,
+                author: this.state.author,
+                buttonTitle: this.state.btnTitle,
+                buttonLink: this.state.btnLink,
+                teams: selectedTeams,
+                rosters: selctedRosters,
+                groups: selectedGroups,
+                allUsers: this.state.allUsersOptionSelected
+            };
+    
+            if (this.state.exists) {
+                this.editDraftMessage(draftMessage).then(() => {
+                    microsoftTeams.tasks.submitTask();
+                });
+            } else {
+                this.postDraftMessage(draftMessage).then(() => {
+                    microsoftTeams.tasks.submitTask();
+                });
+            }
         }
     }
 
