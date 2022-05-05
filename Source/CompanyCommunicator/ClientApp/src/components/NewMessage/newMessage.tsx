@@ -640,19 +640,35 @@ class NewMessage extends React.Component<INewMessageProps, formState> {
 
     private onSelectAllTeams = () => {
         var teams = this.getItems();
+        if (teams.length > this.state.maxNumberOfTeams) {
+            this.setState({ isMaxNumberOfTeamsError: true});
+        }
+        else {
+            this.setState({ isMaxNumberOfTeamsError: false});
+        }
+
         this.setState({ selectedTeams: teams, selectedTeamsNum: teams.length });
     }
 
     private onUnselectAllTeams = () => {
+        this.setState({ isMaxNumberOfTeamsError: false });
         this.setState({ selectedTeams: [], selectedTeamsNum: 0 });
     }
 
     private onSelectAllRosters = () => {
         var teams = this.getItems();
+        if (teams.length > this.state.maxNumberOfTeams) {
+            this.setState({ isMaxNumberOfTeamsError: true});
+        }
+        else {
+            this.setState({ isMaxNumberOfTeamsError: false});
+        }
+
         this.setState({ selectedRosters: teams, selectedRostersNum: teams.length });
     }
 
     private onUnselectAllRosters = () => {
+        this.setState({ isMaxNumberOfTeamsError: false });
         this.setState({ selectedRosters: [], selectedRostersNum: 0 });
     }
 
